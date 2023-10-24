@@ -1,8 +1,9 @@
 package dev.nayzek.telnyxsdkplaygroundsb2.controller;
 
 import dev.nayzek.telnyxsdkplaygroundsb2.controller.data.TelnyxEvent;
-import dev.nayzek.telnyxsdkplaygroundsb2.service.TelnyxService;
+import dev.nayzek.telnyxsdkplaygroundsb2.service.TelnyxVoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,10 @@ import java.util.Objects;
 public class TelnyxWebhookController {
 
     @Autowired
-    private TelnyxService telnyxService;
+    private Environment env;
+
+    @Autowired
+    private TelnyxVoiceService telnyxVoiceService;
 
     @PostMapping(value = "/api/telnyx")
     Map<String, String> dialDemo(@RequestBody TelnyxEvent telnyxEvent) {
@@ -23,17 +27,17 @@ public class TelnyxWebhookController {
         System.out.println(telnyxEvent);
 
         if (Objects.equals(telnyxEvent.getData().getEvent_type(), "call.initiated")) {
-            telnyxService.answerCall(telnyxEvent.getData().getPayload().getCall_control_id());
+            telnyxVoiceService.answerCall(telnyxEvent.getData().getPayload().getCall_control_id());
         } else if (Objects.equals(telnyxEvent.getData().getEvent_type(), "call.answered")) {
-            telnyxService.createGatherObj(
+            telnyxVoiceService.createGatherObj(
                     telnyxEvent.getData().getPayload().getCall_control_id(),
-                    "https://us-central-1.telnyxstorage.com/testblink/blinktest.mp3",
+                    env.getProperty("whisper.url"),
                     2,
                     60000
             );
         } else if (Objects.equals(telnyxEvent.getData().getEvent_type(), "call.dtmf.received")) {
             System.out.println("Digit: " + telnyxEvent.getData().getPayload().getDigit());
-            telnyxService.gatherStop(telnyxEvent.getData().getPayload().getCall_control_id());
+            telnyxVoiceService.gatherStop(telnyxEvent.getData().getPayload().getCall_control_id());
         }
 
         Map<String, String> response = new HashMap<>();

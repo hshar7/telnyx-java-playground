@@ -4,18 +4,22 @@ import com.telnyx.sdk.ApiException;
 import com.telnyx.sdk.api.CallCommandsApi;
 import com.telnyx.sdk.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import java.util.List;
 
 @org.springframework.stereotype.Service
-public class TelnyxService {
+public class TelnyxVoiceService {
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     CallCommandsApi callCommandsApi;
 
     public void dial(String callerNumber, List<String> phoneNumbers, String whisperUrl, boolean doRecord) {
         CallRequest callRequest = new CallRequest(); // CallRequest | Call request
-        callRequest.setConnectionId("CONNECTION ID HERE");
+        callRequest.setConnectionId(env.getProperty("connection.id"));
 
         callRequest.from(callerNumber); // Our Telnyx number
         callRequest.audioUrl(whisperUrl); // Can optionally use .media_name() if want to upload media file to Telnyx
