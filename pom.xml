@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -39,6 +40,27 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.logmein</groupId>
+			<artifactId>goto-core-lib</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.konghq/unirest-java-core -->
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-java-core</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+
+		<!-- pick a JSON module if you want to parse JSON include one of these: -->
+		<!-- Google GSON -->
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-object-mappers-gson</artifactId>
+			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 	<build>
